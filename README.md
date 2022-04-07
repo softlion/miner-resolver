@@ -1,29 +1,33 @@
-# Infos
+
+## Concept
 Scripts to help Helium witness miner to contact the PoC challenger
 
-This repo contains:
+This tool, run from an Helium full miner, checks if it got issues contacting a challenger.  
+If yes, it gets the p2p adress of this challenger from the Helium api, then ping it.  
+If successful, this p2p address is added to local peer book, and the miner will be able to reach the PoC challenger and report the witness.
 
-Balena scripts for:
+# Infos
+
+This repo contains scripts for:
+
+Balena based miners:
 - nebra indoor & outdoor & Rock PI
 - sensecap M1
 
-Docker scripts for:
+Docker based miners:
 - pisces outdoor
 
 Note: you need full root access to your miner.
 
 ## Root access
+Check google.
+
 Balena based miners:
 - You will need to extract the SD card from the miner, plug it in a computer, and update a file on it.
 - add your ssh key to the /config.json file
 
 Pisces:
-- ssh is already available. Use the same credentials as for the dashboard.
-
-## Concept
-This tool is checking from an Helium full miner if it got issues contacting a challenger.  
-If yes, it gets the p2p adress of this challenger from the Helium api, and ping this challenger with this p2p address.  
-If that is successful, this address is added to local peer table.  And the miner will be able to send the witness report to the PoC challenger.
+- ssh is already available. Use the same credentials as for the dashboard. The prefered way is to add a ssh key to admin.
 
 ## Installation
 Choose the correct version for your miner:
@@ -40,20 +44,20 @@ On Pisces, add the user to the docker group so it does not need sudo:
 ```
 sudo usermod -a -G docker admin
 ```
-Logout form ssh and login again so it takes effect.
+Logout from ssh and login again so it takes effect.
 
 ## Usage
-One time:
+Run One time:
 ```
 /tmp/miner-resolver
 ```
 
-Forever every 30mn (Do not spam the public api! You could be blacklisted. No need to test more often.):
+Run Forever every 30mn (Do not spam the public api! You could be blacklisted. No need to test more often.):
 ```
 while true; do /tmp/miner-resolver_arm64; sleep 1800; done
 ```
 
-## Rebuilding
+## Rebuilding (on a desktop computer)
 
 Install dependencies:
 ```
@@ -80,7 +84,7 @@ go build -o out/miner-resolver_pisces -ldflags '-s -w' ./pisces
 upx --best --lzma out/miner-resolver_pisces
 ```
 
-Ex: copy result on pisces miner:
+Ex: copy result on a Pisces miner:
 ```
 scp  .\out\miner-resolver_pisces scp://admin@<miner ip>:<ssh port>
 chmod +x miner-resolver_pisces
