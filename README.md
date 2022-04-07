@@ -1,45 +1,89 @@
-# miner-resolver
-Try to help Helium witness miner to contact the PoC challenger
+# Infos
+Scripts to help Helium witness miner to contact the PoC challenger
+
+This repo contains:
+
+Balena scripts for:
+- nebra indoor & outdoor & Rock PI
+- sensecap M1
+
+Docker scripts for:
+- pisces outdoor
+
+Note: you need full root access to your miner.
+
+## Root access
+Balena based miners:
+- You will need to extract the SD card from the miner, plug it in a computer, and update a file on it.
+- add your ssh key to the /config.json file
+
+Pisces:
+- ssh is already available. Use the same credentials as for the dashboard.
 
 ## Concept
-This tool is checking from an Helium full miner if it got issues contacting challenger.
-In this case, after few miner normal try, this tool is going to ask Helium public API the known p2p adress for this challenger.
-And then will try to ping this challenger with this p2p address.
-If ping is success, it will be added to local miner peer table. And then the miner will be able to send the witness report to the PoC challenger
+This tool is checking from an Helium full miner if it got issues contacting a challenger.  
+If yes, it gets the p2p adress of this challenger from the Helium api, and ping this challenger with this p2p address.  
+If that is successful, this address is added to local peer table.  And the miner will be able to send the witness report to the PoC challenger.
 
 ## Installation
-From the miner get relased binary:
+Choose the correct version for your miner:
+- Balena: https://github.com/snip/miner-resolver/releases/latest/download/miner-resolver_balena_arm64
+- Pisces: https://github.com/snip/miner-resolver/releases/latest/download/miner-resolver_pisces_arm64
+
+From a root ssh session on the miner:
 ```
-wget https://github.com/snip/miner-resolver/releases/latest/download/miner-resolver_arm64 -O /tmp/miner-resolver_arm64
-chmod +x /tmp/miner-resolver_arm64
+wget https://github.com/snip/miner-resolver/releases/latest/download/<your correct version> -O /tmp/miner-resolver
+chmod +x /tmp/miner-resolver
 ```
+
+On Pisces, add the user to the docker group so it does not need sudo:
+```
+sudo usermod -a -G docker admin
+```
+Logout form ssh and login again so it takes effect.
 
 ## Usage
-From the miner:
+One time:
 ```
-/tmp/miner-resolver_arm64
-```
-
-## Or with an endless loop for auto restart
-```
-while true; do /tmp/miner-resolver_arm64; sleep 120; done
+/tmp/miner-resolver
 ```
 
-## Building
+Forever every 30mn (Do not spam the public api! You could be blacklisted. No need to test more often.):
+```
+while true; do /tmp/miner-resolver_arm64; sleep 1800; done
+```
+
+## Rebuilding
 
 Install dependencies:
 ```
-go get github.com/hpcloud/tail
+go install github.com/hpcloud/tail@latest
+```
+install UPX (https://upx.github.io/ or `choco install upx` on windows)
+
+Set the enviroment variable
+```
+#linux / macos
+env GOOS=linux GOARCH=arm64 <go build ...>
+
+#powershell
+$Env:GOOS="linux";$Env:GOARCH="arm64";
+<go build ...>
 ```
 
-Normal build:
+Release build:
 ```
-go build -o miner-resolver
+go build -o out/miner-resolver_balena -ldflags '-s -w' ./balena
+upx --best --lzma out/miner-resolver_balena
+
+go build -o out/miner-resolver_pisces -ldflags '-s -w' ./pisces
+upx --best --lzma out/miner-resolver_pisces
 ```
 
-Cross compiling for miner:
+Ex: copy result on pisces miner:
 ```
-env GOOS=linux GOARCH=arm64 go build -o miner-resolver_arm64
+scp  .\out\miner-resolver_pisces scp://admin@<miner ip>:<ssh port>
+chmod +x miner-resolver_pisces
 ```
 
 
