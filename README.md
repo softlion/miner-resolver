@@ -65,7 +65,7 @@ go install github.com/hpcloud/tail@latest
 ```
 install UPX (https://upx.github.io/ or `choco install upx` on windows)
 
-Set the enviroment variable
+Set these enviroment variables:
 ```
 #linux / macos
 env GOOS=linux GOARCH=arm64 <go build ...>
@@ -75,7 +75,7 @@ $Env:GOOS="linux";$Env:GOARCH="arm64";
 <go build ...>
 ```
 
-Release build:
+Release build: (make sure you set the environment variables above first!)
 ```
 go build -o out/miner-resolver_balena -ldflags '-s -w' ./balena
 upx --best --lzma out/miner-resolver_balena
