@@ -52,9 +52,9 @@ Run One time:
 /tmp/miner-resolver
 ```
 
-Run Forever every 30mn (Do not spam the public api! You could be blacklisted. No need to test more often.):
+Run Forever:
 ```
-while true; do /tmp/miner-resolver_arm64; sleep 1800; done
+while true; do /tmp/miner-resolver_arm64; sleep 120; done
 ```
 
 ## Rebuilding (on a desktop computer)
