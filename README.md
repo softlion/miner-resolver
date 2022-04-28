@@ -55,7 +55,7 @@ Run One time:
 Run Forever in background:
 ```
 screen
-while true; do ./miner-resolver_arm64; sleep 120; done
+while true; do ./miner-resolver; sleep 120; done
 <ctrl-a d>
 ```
 
