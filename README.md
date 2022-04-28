@@ -31,13 +31,13 @@ Pisces:
 
 ## Installation
 Choose the correct version for your miner:
-- Balena: https://github.com/snip/miner-resolver/releases/latest/download/miner-resolver_balena_arm64
-- Pisces: https://github.com/snip/miner-resolver/releases/latest/download/miner-resolver_pisces_arm64
+- Balena: https://github.com/softlion/miner-resolver/releases/download/v0.0.4/miner-resolver_balena
+- Pisces: https://github.com/softlion/miner-resolver/releases/download/v0.0.4/miner-resolver_pisces
 
 From a root ssh session on the miner:
 ```
-wget https://github.com/snip/miner-resolver/releases/latest/download/<your correct version> -O /tmp/miner-resolver
-chmod +x /tmp/miner-resolver
+wget https://github.com/softlion/miner-resolver/releases/download/v0.0.4/<your correct version> -O miner-resolver
+sudo chmod +x miner-resolver
 ```
 
 On Pisces, add the user to the docker group so it does not need sudo:
@@ -49,12 +49,12 @@ Logout from ssh and login again so it takes effect.
 ## Usage
 Run One time:
 ```
-/tmp/miner-resolver
+./miner-resolver
 ```
 
 Run Forever:
 ```
-while true; do /tmp/miner-resolver_arm64; sleep 120; done
+while true; do ./miner-resolver_arm64; sleep 120; done
 ```
 
 ## Rebuilding (on a desktop computer)
