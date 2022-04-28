@@ -52,9 +52,17 @@ Run One time:
 ./miner-resolver
 ```
 
-Run Forever:
+Run Forever in background:
 ```
+screen
 while true; do ./miner-resolver_arm64; sleep 120; done
+<ctrl-a d>
+```
+
+To stop
+```
+screen -r
+<ctrl-c>
 ```
 
 ## Rebuilding (on a desktop computer)
