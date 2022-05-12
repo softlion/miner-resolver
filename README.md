@@ -1,4 +1,8 @@
 
+## Archived
+
+With the activation of light hotspots, this is not needed anymore and won't have any effect.
+
 ## Concept
 Scripts to help Helium witness miner to contact the PoC challenger
 
